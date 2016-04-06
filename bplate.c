@@ -46,7 +46,7 @@ int main() {
     scanf("%s", programname);   fp = fopen(programname, "w");   /*get program name from user*/
     printf("\aHow many functions would you like to create?\n");  scanf("%d", &numfunc);
     char** funcs = allocate_Functions(numfunc);
-    if(0 == numfunc)    return 0;
+    if(0 == numfunc)    goto nofunctions;
     else if(numfunc > 0){
             printf("\aWrite the function type for each function (i.e int, char*, etc)\n");
             for(i=0;i<numfunc;i++){
@@ -56,6 +56,7 @@ int main() {
 
     /*	----------------------------------------------------	*/
     /* now we can begin to print the file */
+    nofunctions:
     print_Program(fp, numfunc, programname, funcs);
 
     /*garbage collection*/
@@ -122,8 +123,8 @@ void print_Preprocessors(FILE* fp, int numfunct, char* programname, char** funcs
     fprintf(fp, "/*  Pre-processor Directives    */\n");    /*printing the pre-processors*/
     fprintf(fp, "/*included libraries*/\n");   fprintf(fp, "\t%cinclude %cstdlib.h%c\n", 35, 60, 62);
     fprintf(fp, "\t%cinclude %cstdio.h%c\n", 35, 60, 62);  newLine(fp);	fprintf(fp, "/*included constants*/\n");
-    fprintf(fp, "/*included functions*/\n");    print_Function_Prototypes(fp, numfunct, funcs);     /*printing function prototypes*/
-    fprintf(fp, "/*included external variables*/\n");   fprintf(fp, "/*included structures*/\n");
+    fprintf(fp, "/*included structures*/\n");   fprintf(fp, "/*included functions*/\n");
+    print_Function_Prototypes(fp, numfunct, funcs);     fprintf(fp, "/*included external variables*/\n");
     lineSpace(fp);
 }
 
@@ -148,7 +149,7 @@ void print_Function_Prototypes(FILE* fp, int numfunc, char** funcs){
 void print_Main(FILE* fp){
     fprintf(fp, "/*main function: describe the main function here*/\n");
     fprintf(fp, "int main%c%c %c\n", 40,41,123);   fprintf(fp, "\t/*initialize variables, files, and pointers below*/\n\n\n\n");
-    fprintf(fp, "\treturn 0%c\n", 59); fprintf(fp, "%c", 125);
+    fprintf(fp, "\t/*garbage collection*/\n\treturn 0%c\n", 59); fprintf(fp, "%c", 125);
 }
 
 /*	----------------------------------------------------	*/
